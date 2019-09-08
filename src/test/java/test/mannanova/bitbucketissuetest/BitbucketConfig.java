@@ -1,18 +1,23 @@
 package test.mannanova.bitbucketissuetest;
 
-import org.aeonbits.owner.Config;
+public class BitbucketConfig {
 
-public interface BitbucketConfig extends Config{
+  public String apiUrl(){
+    return "https://api.bitbucket.org/";
 
-  @DefaultValue("https://api.bitbucket.org/")
-  String apiHost();
+  }
 
-  @DefaultValue("mannanova-apitest")
-  String userName();
 
-  @DefaultValue("2u2HbZAs")
-  String password();
+  public String userName(){
+    return "mannanova-apitest";
+  }
 
-  @DefaultValue("create-issue-test-repo")
-  String repo();
+
+  public String password(){
+    return "2u2HbZAs";
+  }
+
+  public String repository(){
+    return "create-issue-test-repo";
+  }
 }

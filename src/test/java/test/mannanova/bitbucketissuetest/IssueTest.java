@@ -2,8 +2,6 @@ package test.mannanova.bitbucketissuetest;
 
 import com.jayway.restassured.response.ResponseBody;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.aeonbits.owner.ConfigFactory;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +17,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class IssueTest {
 
   private WebDriver webDriver;
-  private final String TITLE = RandomStringUtils.randomAlphabetic(15);
-  private BitbucketConfig bitbucketConfig = ConfigFactory.create(BitbucketConfig.class);
+  private final String TITLE = "Test Issue";
+  private BitbucketConfig bitbucketConfig = new BitbucketConfig();
   private Issue issue;
 
   @Before
@@ -41,7 +39,7 @@ public class IssueTest {
     String url = String.format(
         "https://bitbucket.org/%s/%s/issues/%s",
             bitbucketConfig.userName(),
-            bitbucketConfig.repo(),
+            bitbucketConfig.repository(),
             issue.getId()
     );
 
@@ -57,10 +55,10 @@ public class IssueTest {
     ResponseBody response = given()
         .auth().basic(bitbucketConfig.userName(), bitbucketConfig.password())
         .header("Content-Type", "application/json")
-        .baseUri(bitbucketConfig.apiHost())
+        .baseUri(bitbucketConfig.apiUrl())
         .body(issue)
         .when()
-        .post("2.0/repositories/"+bitbucketConfig.userName()+ "/"+bitbucketConfig.repo())
+        .post("2.0/repositories/"+bitbucketConfig.userName()+ "/"+bitbucketConfig.repository())
         .getBody();
 
     return response.as(Issue.class);
@@ -70,11 +68,11 @@ public class IssueTest {
     given()
         .auth().preemptive()
             .basic(bitbucketConfig.userName(), bitbucketConfig.password())
-            .baseUri(bitbucketConfig.apiHost())
+            .baseUri(bitbucketConfig.apiUrl())
             .when()
             .delete(
                     "2.0/repositories/"+bitbucketConfig.userName()+
-                            "/"+bitbucketConfig.repo()+
+                            "/"+bitbucketConfig.repository()+
                             "/issues/"+issue.getId()
             )
             .then().statusCode(204);
