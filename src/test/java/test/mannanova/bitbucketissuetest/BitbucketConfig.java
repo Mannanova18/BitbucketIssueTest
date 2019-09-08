@@ -12,6 +12,9 @@ public class BitbucketConfig {
     return "mannanova-apitest";
   }
 
+  public String eMail(){
+    return "bulino.nat@gmail.com.";
+  }
 
   public String password(){
     return "2u2HbZAs";

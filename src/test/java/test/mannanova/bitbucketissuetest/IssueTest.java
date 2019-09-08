@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import org.apache.log4j.Logger;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,9 +18,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class IssueTest {
 
   private WebDriver webDriver;
-  private final String TITLE = "Test Issue";
+  private final String TITLE = "Test Issue 1234";
   private BitbucketConfig bitbucketConfig = new BitbucketConfig();
   private Issue issue;
+  final static Logger logger = Logger.getLogger(IssueTest.class);
 
   @Before
   public void startWebDriver() {
@@ -32,6 +34,16 @@ public class IssueTest {
   public void stopWebDriver() {
     webDriver.quit();
     deleteIssue(issue);
+  }
+
+  @Test
+  public void CreateIssueTest(){
+//    BasicConfigurator.configure();
+//    logger.debug("Hello World!");
+//    logger.info("Info");
+//    logger.warn("warning!");
+//    logger.error("error");
+//    issue = createIssue(TITLE);
   }
 
   @Test
@@ -53,14 +65,14 @@ public class IssueTest {
     issue.setTitle(title);
 
     ResponseBody response = given()
-        .auth().basic(bitbucketConfig.userName(), bitbucketConfig.password())
+        .auth().basic(bitbucketConfig.eMail(), bitbucketConfig.password())
         .header("Content-Type", "application/json")
         .baseUri(bitbucketConfig.apiUrl())
         .body(issue)
         .when()
-        .post("2.0/repositories/"+bitbucketConfig.userName()+ "/"+bitbucketConfig.repository())
+        .post("2.0/repositories/"+bitbucketConfig.userName()+ "/"+bitbucketConfig.repository()+"/issues")
         .getBody();
-
+    logger.info(response.asString());
     return response.as(Issue.class);
   }
 
