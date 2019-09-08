@@ -37,7 +37,7 @@ public class IssueTest {
   }
 
   @Test
-  public void shouldSeeCreatedIssueTitle() {
+  public void checkTitleAfterCreate() {
     String url = String.format(
         "https://bitbucket.org/%s/%s/issues/%s",
             bitbucketConfig.userName(),
@@ -60,13 +60,7 @@ public class IssueTest {
         .baseUri(bitbucketConfig.apiHost())
         .body(issue)
         .when()
-        .post(
-            String.format(
-                "2.0/repositories/%s/%s/issues",
-                    bitbucketConfig.userName(),
-                    bitbucketConfig.repo()
-            )
-        )
+        .post("2.0/repositories/"+bitbucketConfig.userName()+ "/"+bitbucketConfig.repo())
         .getBody();
 
     return response.as(Issue.class);
@@ -74,18 +68,15 @@ public class IssueTest {
 
   private void deleteIssue(Issue issue) {
     given()
-        .auth().preemptive().basic(bitbucketConfig.userName(), bitbucketConfig.password())
-        .baseUri(bitbucketConfig.apiHost())
-        .when()
-        .delete(
-            String.format(
-                "2.0/repositories/%s/%s/issues/%s",
-                    bitbucketConfig.userName(),
-                    bitbucketConfig.repo(),
-                issue.getId()
+        .auth().preemptive()
+            .basic(bitbucketConfig.userName(), bitbucketConfig.password())
+            .baseUri(bitbucketConfig.apiHost())
+            .when()
+            .delete(
+                    "2.0/repositories/"+bitbucketConfig.userName()+
+                            "/"+bitbucketConfig.repo()+
+                            "/issues/"+issue.getId()
             )
-        )
-        .then()
-        .statusCode(204);
+            .then().statusCode(204);
   }
 }

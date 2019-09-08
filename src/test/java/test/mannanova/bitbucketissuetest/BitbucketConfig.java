@@ -7,12 +7,12 @@ public interface BitbucketConfig extends Config{
   @DefaultValue("https://api.bitbucket.org/")
   String apiHost();
 
-  @DefaultValue("Mannanova18")
+  @DefaultValue("mannanova-apitest")
   String userName();
 
-  @DefaultValue("Jaguarwow13")
+  @DefaultValue("2u2HbZAs")
   String password();
 
-  @DefaultValue("BitbucketIssueTest")
+  @DefaultValue("create-issue-test-repo")
   String repo();
 }
